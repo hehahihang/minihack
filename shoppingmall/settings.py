@@ -38,10 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'product',
-    'django.contrib.sites',
 
+     #가입한 계정을 관리할때
+    'django.contrib.sites',
     'allauth',
-    'allauth.account', #가입한 계정을 관리할때
+    'allauth.account',
     'allauth.socialaccount',
 ]
 
@@ -111,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -123,12 +124,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+#Static 파일을 관리하기 위해 URL과 경로 설정
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'shoppingmall', 'static')
 ]
 
+
+#MEDIA 파일을 관리하기 위해 URL과 경로 설정
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR,'shoppingmall','media')
+
+
+#LOGIN등 가입 경로
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend', #superuser로 로그인이 가능하게한다.
     'allauth.account.auth_backends.AuthenticationBackend', #이메일로 로그인하기등을 가능하게한다.

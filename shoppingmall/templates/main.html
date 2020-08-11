@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="container">
-    <h1>메인페이지</h1>
+<div class="container" id="home">
+    <h1>사자네 쇼핑몰에 오신것을 환영합니다</h1>
+    <a href="{% url 'product:main_list' %}"><img src="{% static 'images/amzn.jpg'%}"></a>
+    <h1>&uarr;&uarr; 보러가기 &uarr;&uarr;</h1>
 </div>
 {% endblock %}

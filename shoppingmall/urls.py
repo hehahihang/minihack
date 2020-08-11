@@ -22,6 +22,9 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.main, name="main"),
+    path('accounts/', include('allauth.urls')),
+    path('product/', include('product.urls')), #상품관련 서비스를 이용하기 위해 경로 설정
 ]
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
