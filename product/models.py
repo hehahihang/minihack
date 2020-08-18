@@ -20,7 +20,10 @@ class Review(models.Model):
     objects = models.Manager()
     scores = models.IntegerField(default=0) #평점
     content = models.TextField(max_length=300) #내용
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product") ##상품
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="review") ##상품
+    #related_name은 1:N관계의 모델 Prdocut:Review 관계에서 Product 객체가 Review의 객체들을 불러올때 (Review에 접근할때) 사용
+    #따라서 related_name = "review" 가 되면 Product.review.all() 을 통해 호출하는 등의 작업이 가능하다.
+    #related_name="product"로 설정한것이 틀리지는 않았지만 의미상으로는 review가 들어가야 한다.
     created_at = models.DateTimeField(auto_now_add=True) #생성시간
     updated_at = models.DateTimeField(auto_now=True) #수정시간
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)

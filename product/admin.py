@@ -21,7 +21,7 @@ class ReviewAdmin(admin.ModelAdmin):
         'product',
     )
     search_fields = (
-        'socres',
+        'scores',
     )
 
 

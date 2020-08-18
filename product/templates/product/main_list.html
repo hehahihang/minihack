@@ -20,12 +20,14 @@
                         <h4 style="font-size: 20px;">{{ p.title | truncatechars:15 }}</h4>
                         <h5>&#8361; {{ p.price }}</h5><a href="{% url 'product:show' p.id %}" class="btn btn-dark" style="width: 100px;">보기</a>
                         <a href="{% url 'product:like' p.id %}">
+                        {% if user.is_authenticated %}
                             {% if user in p.like_users.all %}
                                 <i class="fas fa-heart"></i></a>
                             {% else %}
                                 <i class="far fa-heart"></i></a>
                             {% endif %}
-                            {{ p.like_users.count }}
+                        {% endif %}
+                            좋아요 {{ p.like_users.count }}명
                         </a>
                     </div>
                 </div>

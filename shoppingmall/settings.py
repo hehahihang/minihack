@@ -118,7 +118,9 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
+# USE_TZ = False -> template, form, models의 datetime을 TIME_ZONE 시간대로 적용
+# USE_TZ = True -> template, form 에서의 시간만 내가 설정한 TIME_ZONE시간으로 적용 // models의 created_at에는 적용 XX
 
 
 # Static files (CSS, JavaScript, Images)
