@@ -19,8 +19,7 @@
         <a href="{% url 'product:update' product.pk %}" class="btn btn-primary">상품수정</a>
         <a href="{% url 'product:delete' product.pk %}" class="btn btn-danger">상품삭제</a>
     {% else %}
-        <a href="{% url 'product:main_list'%}" class="btn btn-dark">뒤로</a>
-        <a href="" class="btn btn-dark">댓글</a>
+        <a href="{% url 'product:main_list'%}" class="btn btn-dark">목록</a>
     {% endif %}
     <br>
     <!--좋아요 기능-->
@@ -33,7 +32,43 @@
         {% endif %}
     </a>
     {% endif %}
-    {{ product.like_users.count }} 명이 좋아합니다
-    
+    이 상품을 {{ product.like_users.count }}명이 좋아합니다.<br><br>
+
+    <!--로그인 했다면 댓글작성-->
+    {% if user.is_authenticated %}
+        <div class="container">
+            <form class="form-row" action="{% url 'product:create_review' product.id %}" method="POST">
+                {% csrf_token %}
+                <textarea class="form-control col-11 mr-2" name="content" placeholder="리뷰 내용 입력.."></textarea>
+                <input type="submit" class="btn btn-dark" value="작성">
+            </form>
+        </div>
+    <!--로그인이 안된경우 로그인 유도-->
+    {% else %}
+    <div class="container">
+        <form class="form-row" action="{% url 'product:create_review' product.id %}" method="POST">
+            {% csrf_token %}
+            <textarea class="form-control col-11 mr-2" name="content" placeholder="로그인 후 작성이 가능합니다." disabled></textarea>
+            <input type="submit" class="btn btn-dark" value="작성">
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="container mt-5 mb-5">
+        {% for r in review %}
+            <div class="card" style="text-align: left;">
+                <div class="card-body">
+                    <b>{{ r.reviewer }}</b> : {{ r.content }}<br>
+                    <small>{{ r.created_at }}</small>
+                    {% if user == r.reviewer  %}
+                        <div style="text-align: right;">
+                            <a href="#" class="btn btn-dark">수정</a>
+                            <a href="{% url 'product:delete_review' r.pk %}" class="btn btn-danger">삭제</a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>   
 </div>
 {% endblock %}

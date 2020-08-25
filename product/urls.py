@@ -11,4 +11,6 @@ urlpatterns = [
     path('update/<int:id>', update, name="update"),
     path('deltete/<int:id>', delete, name="delete"),
     path('like/<int:id>', like, name="like"),
+    path('create_review/<int:product_id>', create_review, name="create_review"),
+    path('delete_review/<int:review_id>', delete_review, name="delete_review"),
 ]

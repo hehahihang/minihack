@@ -23,7 +23,8 @@ def main_list(request):
 
 def show(request, id):
     product = Product.objects.get(pk=id)
-    return render(request, 'product/show.html', {'product': product})
+    all_reivew = product.review.all().order_by('-created_at')
+    return render(request, 'product/show.html', {'product': product, 'review':all_reivew })
 
 def update(request, id):
     product = get_object_or_404(Product, pk=id)
@@ -55,3 +56,19 @@ def like(request, id):
         return redirect('product:show', product.id)
     else:
         return redirect('product:main_list')
+
+def create_review(request, product_id):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, pk=product_id)
+        writer = request.user
+        review_content = request.POST.get('content')
+        Review.objects.create(content=review_content, product=product, reviewer=writer)
+    return redirect('product:show', product_id)
+
+def delete_review(request, review_id:
+    review = get_object_or_404(Review, pk=review_id)
+    review.delete()
+    return redirect('product:show')
+    #return 부분이랑 html넘어가는 부분이 뭔가 틀렸는데 잘 모르게쓰여ㅠㅠ
+
+    #그리고 update는 잘 모르겠습니다ㅠㅠ

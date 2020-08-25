@@ -28,5 +28,3 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True) #수정시간
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     
-
-# Create your models here.

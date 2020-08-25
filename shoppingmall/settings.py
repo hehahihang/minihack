@@ -44,6 +44,10 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+
+    #social로그인 제공업체
+    'allauth.socialaccount.providers.google',
+    
 ]
 
 MIDDLEWARE = [
