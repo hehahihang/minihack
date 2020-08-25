@@ -65,7 +65,7 @@ def create_review(request, product_id):
         Review.objects.create(content=review_content, product=product, reviewer=writer)
     return redirect('product:show', product_id)
 
-def delete_review(request, review_id:
+def delete_review(request, review_id:)
     review = get_object_or_404(Review, pk=review_id)
     review.delete()
     return redirect('product:show')
