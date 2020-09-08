@@ -13,4 +13,6 @@ urlpatterns = [
     path('like/<int:id>', like, name="like"),
     path('create_review/<int:product_id>', create_review, name="create_review"),
     path('delete_review/<int:review_id>', delete_review, name="delete_review"),
+    path('update_review/<int:review_id>', update_review, name="update_review"),
+    path('like_list/', like_list, name="like_list"),
 ]

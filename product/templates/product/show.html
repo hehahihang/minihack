@@ -12,8 +12,16 @@
     {% endif %}
     <h5>{{ product.info }}<br><br>
     등록 : {{ product.created_at }}<br>
-    수정 : {{ product.updated_at}}<br>
-    판매자 : {{ product.seller }}</h5>
+    수정 : {{ product.updated_at}}</h5><br>
+    {% if product.seller %}
+        {% if product.seller.username == 'user' %}
+            <h5>판매자 : {{ product.seller.last_name }}{{ product.seller.first_name }}</h5>
+        {% else %}
+            <h5>판매자 : {{ product.seller }}</h5>
+        {% endif %}
+    {% else %}
+        <h5>판매자 : 알 수 없음</h5>
+    {% endif %}
     
     {% if user == product.seller %}
         <a href="{% url 'product:update' product.pk %}" class="btn btn-primary">상품수정</a>
@@ -36,9 +44,17 @@
 
     <!--로그인 했다면 댓글작성-->
     {% if user.is_authenticated %}
-        <div class="container">
+        <div class="container mt-5">
             <form class="form-row" action="{% url 'product:create_review' product.id %}" method="POST">
                 {% csrf_token %}
+                <select class="form-control col-2 mr-1" name="scores">
+                    <option value="0">☆</option>
+                    <option value="1">★</option>
+                    <option value="2">★★</option>
+                    <option value="3">★★★</option>
+                    <option value="4">★★★★</option>
+                    <option value="5">★★★★★</option>
+                </select>
                 <textarea class="form-control col-11 mr-2" name="content" placeholder="리뷰 내용 입력.."></textarea>
                 <input type="submit" class="btn btn-dark" value="작성">
             </form>
@@ -46,7 +62,8 @@
     <!--로그인이 안된경우 로그인 유도-->
     {% else %}
     <div class="container">
-        <form class="form-row" action="{% url 'product:create_review' product.id %}" method="POST">
+        <!--로그인 창으로 url 연결하여 해결-->
+        <form class="form-row" action="{% url 'account_login' %}">
             {% csrf_token %}
             <textarea class="form-control col-11 mr-2" name="content" placeholder="로그인 후 작성이 가능합니다." disabled></textarea>
             <input type="submit" class="btn btn-dark" value="작성">
@@ -54,16 +71,54 @@
     </div>
     {% endif %}
 
+    <!--리뷰를 보여주는 부분-->
     <div class="container mt-5 mb-5">
         {% for r in review %}
+            
             <div class="card" style="text-align: left;">
                 <div class="card-body">
-                    <b>{{ r.reviewer }}</b> : {{ r.content }}<br>
-                    <small>{{ r.created_at }}</small>
+                    {% if r.reviewer %}
+                        {% if r.reviewer.username == 'user' %}
+                            <b>{{ r.reviewer.last_name }}{{ r.reviewer.first_name }} : </b>{{ r.content }}
+                        {% else %}
+                            <b>{{ r.reviewer }}</b> : {{ r.content }}<br>
+                        {% endif %}
+                    {% else %}
+                        <b>알 수 없는 게시자</b>{{ r.content }}<br>
+                    {% endif %}
+
+                    <!--리뷰가 수정된다면 수정된 시각으로 변경-->
+                    {% if r.created_at == r.updated_at %}
+                        <small>{{ r.created_at | date:'Y-m-d  H:m'}} 작성됨</small><br>
+                    {% else %}
+                        <small>{{ r.updated_at | date:'Y-m-d  H:m'}} 수정됨</small><br>
+                    {% endif %}
+
+                    <!--뭔가 이부분을 더 깔끔하게 for문을 사용해서 해보려고했는데 잘 안되영ㅠㅠ
+                    for i in 5 
+                        if r.score == i 
+                            print("★"*i) 
+                            이런식으로 프린트 해보고싶은데 방법을 잘 모르겠어영-->
+                    평점 : 
+                    {% if r.scores == 1 %}
+                        ★ 
+                    {% elif r.scores == 2 %}
+                        ★★
+                    {% elif r.scores == 3 %}
+                        ★★★
+                    {% elif r.scores == 4 %}
+                        ★★★★
+                    {% elif r.scores == 5 %}
+                        ★★★★★
+                    {% else %}
+                        ☆
+                    {% endif %}
+                    <!-- 평점 매기기부분 수정해야댈듯-->
+
                     {% if user == r.reviewer  %}
                         <div style="text-align: right;">
-                            <a href="#" class="btn btn-dark">수정</a>
-                            <a href="{% url 'product:delete_review' r.pk %}" class="btn btn-danger">삭제</a>
+                            <a href="{% url 'product:update_review' r.id %}" class="btn btn-dark">수정</a>
+                            <a href="{% url 'product:delete_review' r.id %}" class="btn btn-danger">삭제</a>
                         </div>
                     {% endif %}
                 </div>

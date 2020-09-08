@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="mb-5">
+    <h3>리뷰 수정하기</h3>
+    <div class="container mt-5">
+        <form class="form-row" action="{% url 'product:update_review' review.id %}" method="POST">
+            {% csrf_token %}
+            <select class="form-control col-2 mr-1" name="scores">
+                <option value="0">{% if review.scores == 0 %} selected {% endif %}☆</option>
+                <option value="1">{% if review.scores == 1 %} selected {% endif %}★</option>
+                <option value="2">{% if review.scores == 2 %} selected {% endif %}★★</option>
+                <option value="3">{% if review.scores == 3 %} selected {% endif %}★★★</option>
+                <option value="4">{% if review.scores == 4 %} selected {% endif %}★★★★</option>
+                <option value="4">{% if review.scores == 4 %} selected {% endif %}★★★★★</option>
+            </select>
+            <textarea class="form-control col-11 mr-2" name="content" placeholder="리뷰 내용 입력.."></textarea>
+            <input type="submit" class="btn btn-dark" value="수정">
+        </form>
+    </div>
+</div>
+{% endblock %}

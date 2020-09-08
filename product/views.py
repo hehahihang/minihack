@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Review
+from django.contrib.auth.decorators import login_required
+
 
 def new(req):
     return render(req, 'product/new.html')
@@ -61,14 +63,31 @@ def create_review(request, product_id):
     if request.method == 'POST':
         product = get_object_or_404(Product, pk=product_id)
         writer = request.user
+        review_scores = request.POST.get('scores') #html에서 scores라는 form을 찾고, 그 input값을 가져와서 모델링 해두었던 scores변수에 담는다.
         review_content = request.POST.get('content')
-        Review.objects.create(content=review_content, product=product, reviewer=writer)
+        Review.objects.create(content=review_content, product=product, reviewer=writer, scores=review_scores)
     return redirect('product:show', product_id)
 
 def delete_review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
+    product_id = review.product.id
     review.delete()
-    return redirect('product:show')
+    return redirect('product:show', product_id)
     #return 부분이랑 html넘어가는 부분이 뭔가 틀렸는데 잘 모르게쓰여ㅠㅠ
 
     #그리고 update는 잘 모르겠습니다ㅠㅠ
+
+def update_review(request, review_id):
+    review = get_object_or_404(Review, pk=review_id)
+    if request.method == 'POST':
+        product_id = review.product.id
+        review.content = request.POST.get('content')
+        review.scores = request.POST.get('scores')
+        review.save()
+        return redirect('product:show', product_id)
+    return render(request, 'product/update_review.html', {'review' : review})
+
+#좋아요 한 상품 목록을 보여주는건 조금 더 생각을 해볼게여!
+@login_required
+def like_list(request, id):
+    product = get_object_or_404(Product, pk=id)

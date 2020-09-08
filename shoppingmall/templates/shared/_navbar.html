@@ -17,6 +17,9 @@
       </li>
       {% if user.is_authenticated %}
         <li class="nav-item">
+          <a class="nav-link" href="{% url 'product:like_list' %}">찜한 상품</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="{% url 'account_logout' %}">로그아웃</a>
         </li>
         <li class="nav-item">
