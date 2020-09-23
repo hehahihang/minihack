@@ -25,6 +25,7 @@ SECRET_KEY = '9p&86)r4=qw8l6n_hmr38+s-z-_xch)yxaw5xtrg$-4m=q+h^h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#웹 서버와 연결하기위해
 ALLOWED_HOSTS = ['*']
 
 
@@ -47,7 +48,8 @@ INSTALLED_APPS = [
 
     #social로그인 제공업체
     'allauth.socialaccount.providers.google',
-    
+
+    #usesr앱 추가
 ]
 
 MIDDLEWARE = [

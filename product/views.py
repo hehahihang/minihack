@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Review
+from .models import Product, Review, Like
 from django.contrib.auth.decorators import login_required
 
 
@@ -25,6 +25,8 @@ def main_list(request):
 
 def show(request, id):
     product = Product.objects.get(pk=id)
+    product.view_count += 1
+    product.save()
     all_reivew = product.review.all().order_by('-created_at')
     return render(request, 'product/show.html', {'product': product, 'review':all_reivew })
 
@@ -45,17 +47,16 @@ def delete(request, id):
     product.delete()
     return redirect('product:main_list')
 
-def like(request, id):
+def post_like(request, id):
     product = get_object_or_404(Product, pk=id)
-    
     #좋아요 취소
-    if request.user in product.like_users.all():
-        product.like_users.remove(request.user)
+    if request.user in product.like_user_set.all():
+        product.like_user_set.remove(request.user)
     else:
-        product.like_users.add(request.user)
+        product.like_user_set.add(request.user)
 
     if request.GET.get('redirect_to') == 'show':
-        return redirect('product:show', product.id)
+        return redirect('product:show', id)
     else:
         return redirect('product:main_list')
 
@@ -88,6 +89,9 @@ def update_review(request, review_id):
     return render(request, 'product/update_review.html', {'review' : review})
 
 #좋아요 한 상품 목록을 보여주는건 조금 더 생각을 해볼게여!
+
 @login_required
-def like_list(request, id):
-    product = get_object_or_404(Product, pk=id)
+def like_list(request):
+    likes = Like.objects.filter(user=request.user)
+    ## 또는 likes = request.user.like_set.all()
+    return render(request, 'product/like_list.html', {'likes':likes})

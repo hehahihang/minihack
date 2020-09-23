@@ -3,15 +3,20 @@
 {% block content %}
     <div class="container">
         {% if user.is_authenticated %}
-            <h1>좋아요 목록</h1>
+            <h1>찜한 상품</h1>
             <div class="row">
-                {% for l in likes %}
+                {% for like in likes %}
                     <div class="col-md-4 col-12">
-                        <div class="card" style="width: 18rem; margin-top: 20px;">
+                        <div class="card" style="width: 18rem; margin-top: 20px; text-align: center;">
                             <div class="card-body">
-                                <h5 class="card-title">{{ l.post.title }}</h5>
-                                <p>조회수 : {{ l.post.view_count }}</p>
-                                <a href="{% url 'posts:show' l.post.id %}" class="btn btn-primary">상세보기</a>
+                                {% if like.product.image %}
+                                    <img class="card-img-top" src="{{ like.product.image.url }}" style="width: 150px; height: 150px;">
+                                {% endif %}
+                            </div>
+                            <div class="card-footer">
+                                <h5 class="card-title">{{ like.product.title }}</h5>
+                                <h5>{{ like.created_at | date:'Y-m-d'}} 에 찜했습니다</h5>
+                                <a href="{% url 'product:show' like.product.id %}" class="btn btn-dark">상세보기</a>
                             </div>
                         </div>
                     </div>

@@ -32,15 +32,16 @@
     <br>
     <!--좋아요 기능-->
     {% if user.is_authenticated %}
-    <a href="{% url 'product:like' product.id %}?redirect_to=show">
-        {% if user in product.like_users.all %}
+    <a href="{% url 'product:post_like' product.id %}?redirect_to=show">
+        {% if user in product.like_user_set.all %}
             <i class="fas fa-heart"></i></a>
         {% else %}
             <i class="far fa-heart"></i></a>
         {% endif %}
     </a>
     {% endif %}
-    이 상품을 {{ product.like_users.count }}명이 좋아합니다.<br><br>
+    이 상품을 {{ product.like_user_set.count }}명이 좋아합니다.<br>
+    조회수: {{ product.view_count }}
 
     <!--로그인 했다면 댓글작성-->
     {% if user.is_authenticated %}

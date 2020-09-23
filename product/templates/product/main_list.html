@@ -18,17 +18,17 @@
                     </div>
                     <div class="card-footer">
                         <h4 style="font-size: 20px;">{{ p.title | truncatechars:15 }}</h4>
-                        <h5>&#8361; {{ p.price }}</h5><a href="{% url 'product:show' p.id %}" class="btn btn-dark" style="width: 100px;">보기</a>
-                        <a href="{% url 'product:like' p.id %}">
+                        <h5>&#8361; {{ p.price }}</h5><a href="{% url 'product:show' p.id %}" class="btn btn-dark" style="width: 100px;">상세보기</a>
+                        <a href="{% url 'product:post_like' p.id %}">
                             {% if user.is_authenticated %}
-                                {% if user in p.like_users.all %}
+                                {% if user in p.like_user_set.all %}
                                     <i class="fas fa-heart"></i>
                                 {% else %}
                                     <i class="far fa-heart"></i>
                                 {% endif %}
                             {% endif %}
                         </a>
-                        <h5>좋아요 <b style="color: red;"> {{ p.like_users.count }}명</b></h5>
+                        <h5>좋아요 <b style="color: red;"> {{ p.like_user_set.count }}명</b></h5>
                     </div>
                 </div>
             </div>

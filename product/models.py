@@ -6,16 +6,21 @@ from django.conf import settings
 class Product(models.Model):
     objects = models.Manager()
     title = models.TextField(max_length=15, null=False) #상품명
-    price = models.IntegerField() #가격
     info = models.TextField(max_length=200, null=True) #설명
+    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    price = models.IntegerField() #가격
     stock = models.IntegerField() #재고
+    view_count = models.IntegerField(default=0)
     image = models.ImageField(upload_to='images/', null=True) #이미지
     created_at = models.DateTimeField(auto_now_add=True) # 생성시간
     updated_at = models.DateTimeField(auto_now=True) # 수정시간
-    seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_product")
+    like_user_set = models.ManyToManyField(User, blank=True, related_name="like_user_set", through="Like")
 
-#리뷰
+    @property
+    def like_count(self):
+        return self.like_user_set.count()
+
+#리뷰  
 class Review(models.Model):
     objects = models.Manager()
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="review") ##상품
@@ -28,3 +33,14 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) #생성시간
     updated_at = models.DateTimeField(auto_now=True) #수정시간
     
+class Like(models.Model):
+    objects = models.Manager()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together =(('user','product')) #함께 유일해야하는 필드의 쌍을 의미한다. Like모델에서 user와 product의 쌍은 고유하다.
+    #메타데이터를 추가하기위한 모델 내부 클래스
+    #모델 단위에서 설정할 수 있는 옵션    
